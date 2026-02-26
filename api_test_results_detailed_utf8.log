@@ -1,0 +1,50 @@
+﻿[dotenv@17.3.1] injecting env (4) from .env.local -- tip: ≡ƒöÉ prevent building .env in docker: https://dotenvx.com/prebuild
+--- Testing RapidAPI (JSearch) ---
+RapidAPI Success! Found 10 jobs.
+
+--- Testing OpenAI API (gpt-4o-mini) ---
+Using key: sk-proj-3q...fokA
+node : OpenAI Error: 
+429 Too Many Requests
+At line:1 char:1
++ node 
+test-apis-final.js > 
+api_test_results_deta
+iled.log 2>&1
++ ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo   
+           : NotSpe  
+  cified: (OpenAI    
+ Error: 429 Too M    
+any Requests:Str    
+ing) [], RemoteE    
+xception
+    + FullyQualified 
+   ErrorId : Native  
+  CommandError
+ 
+{
+    "error": {
+        "message": 
+"You exceeded your 
+current quota, 
+please check your 
+plan and billing 
+details. For more 
+information on this 
+error, read the 
+docs: https://platfor
+m.openai.com/docs/gui
+des/error-codes/api-e
+rrors.",
+        "type": 
+"insufficient_quota",
+        "param": 
+null,
+        "code": 
+"insufficient_quota"
+    }
+}
+

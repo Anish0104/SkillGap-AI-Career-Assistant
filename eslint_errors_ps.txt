@@ -1,0 +1,113 @@
+﻿
+C:\Users\Anish\Desktop\SkillGap\app\api\analysis\match\route.ts
+   39:26  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   88:32  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  121:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Anish\Desktop\SkillGap\app\api\analyze\route.ts
+   40:23  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   92:32  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  109:47  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  110:50  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  111:51  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  112:49  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  117:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Anish\Desktop\SkillGap\app\api\jobs\search\route.ts
+  17:9   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  70:44  error    Unexpected any. Specify a different type                               @typescript-eslint/no-explicit-any
+  95:21  error    Unexpected any. Specify a different type                               @typescript-eslint/no-explicit-any
+
+C:\Users\Anish\Desktop\SkillGap\app\api\resume\upload\route.ts
+   48:23  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   54:27  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   83:22  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   87:25  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  151:32  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  157:29  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  194:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  229:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Anish\Desktop\SkillGap\app\dashboard\analyze\page.tsx
+   16:10   warning  'Search' is defined but never used                                                                                                                                              @typescript-eslint/no-unused-vars
+   22:44   error    Unexpected any. Specify a different type                                                                                                                                        @typescript-eslint/no-explicit-any
+   26:58   error    Unexpected any. Specify a different type                                                                                                                                        @typescript-eslint/no-explicit-any
+   84:25   error    Unexpected any. Specify a different type                                                                                                                                        @typescript-eslint/no-explicit-any
+  128:45   error    Do not use an `<a>` element to navigate to `/dashboard/resumes/upload/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages  @next/next/no-html-link-for-pages
+  180:115  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                                                                                                                 react/no-unescaped-entities
+  180:123  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                                                                                                                 react/no-unescaped-entities
+  204:49   error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                 react/no-unescaped-entities
+  204:74   error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                 react/no-unescaped-entities
+
+C:\Users\Anish\Desktop\SkillGap\app\dashboard\applications\page.tsx
+   93:49  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  149:86  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+
+C:\Users\Anish\Desktop\SkillGap\app\dashboard\jobs\JobBoardClient.tsx
+   6:29  warning  'Sparkles' is defined but never used      @typescript-eslint/no-unused-vars
+   9:10  warning  'Badge' is defined but never used         @typescript-eslint/no-unused-vars
+  21:21  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  25:38  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Anish\Desktop\SkillGap\app\dashboard\jobs\SeedButton.tsx
+  25:18  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Anish\Desktop\SkillGap\app\dashboard\page.tsx
+   76:49   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   78:72   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   86:54   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  190:117  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Anish\Desktop\SkillGap\app\dashboard\resumes\[id]\page.tsx
+    5:52  warning  'CardDescription' is defined but never used  @typescript-eslint/no-unused-vars
+    8:5   warning  'FileText' is defined but never used         @typescript-eslint/no-unused-vars
+   12:5   warning  'MapPin' is defined but never used           @typescript-eslint/no-unused-vars
+   13:5   warning  'ExternalLink' is defined but never used     @typescript-eslint/no-unused-vars
+   55:54  error    Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+   62:52  error    Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+  156:61  error    Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+  193:60  error    Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+
+C:\Users\Anish\Desktop\SkillGap\app\dashboard\resumes\page.tsx
+  15:28  warning  'error' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Anish\Desktop\SkillGap\app\dashboard\settings\page.tsx
+   4:29  warning  'CardHeader' is defined but never used       @typescript-eslint/no-unused-vars
+   4:41  warning  'CardTitle' is defined but never used        @typescript-eslint/no-unused-vars
+   4:52  warning  'CardDescription' is defined but never used  @typescript-eslint/no-unused-vars
+  20:5   warning  'Globe' is defined but never used            @typescript-eslint/no-unused-vars
+  22:5   warning  'CreditCard' is defined but never used       @typescript-eslint/no-unused-vars
+  47:27  warning  'error' is assigned a value but never used   @typescript-eslint/no-unused-vars
+
+C:\Users\Anish\Desktop\SkillGap\app\login\page.tsx
+  3:46  warning  'CardFooter' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Anish\Desktop\SkillGap\components\dashboard\JobCard.tsx
+   15:5   warning  'TrendingUp' is defined but never used                                                                                                                                                                                                                                                   @typescript-eslint/no-unused-vars
+   33:10  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   34:14  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   41:60  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   54:18  warning  'error' is defined but never used                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+  121:33  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  212:53  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+C:\Users\Anish\Desktop\SkillGap\components\dashboard\StatusDropdown.tsx
+  41:18  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Anish\Desktop\SkillGap\lib\resume-parser.ts
+  47:53  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  77:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  93:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Anish\Desktop\SkillGap\lib\supabase\database.types.ts
+  1:0  error  Parsing error: File appears to be binary
+
+C:\Users\Anish\Desktop\SkillGap\scripts\db-check.js
+  2:26  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  3:1   error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+C:\Users\Anish\Desktop\SkillGap\test-pdf.js
+  1:13  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+Γ£û 72 problems (49 errors, 23 warnings)
+

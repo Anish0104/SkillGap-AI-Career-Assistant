@@ -7,7 +7,7 @@ SkillGap is an intelligent, AI-powered career assistant designed to help profess
 - **Resume Parsing**: Upload your resume (PDF) and let AI extract key skills, experiences, and structured data automatically.
 - **AI Job Matching**: Compare your resume against a specific job description to get a Match Score, uncover missing skills, and receive actionable recommendations.
 - **Application Tracker**: Keep track of the jobs you've applied to, update their statuses (Applied, Interviewing, Offer, Rejected), and monitor your overall progress.
-- **Job Board**: A featured job board (with a built-in mock/seed generator) where you can explore opportunities and save them.
+- **Job Board**: A featured job board powered by the **JSearch API (via RapidAPI)** where you can explore real, live opportunities and save them.
 - **Modern UI**: A fully responsive, accessible, and theme-able interface built with Tailwind CSS, explicitly supporting both premium Light and Dark modes seamlessly across actions.
 
 ## Tech Stack
@@ -18,6 +18,7 @@ SkillGap is an intelligent, AI-powered career assistant designed to help profess
 - **UI Components**: shadcn/ui, Radix UI, Lucide Icons
 - **Database / Auth / Storage**: Supabase (PostgreSQL, Row Level Security)
 - **AI & Processing**: OpenAI API (`gpt-4o-mini`), pdf.js (for client-side/server-side parsing)
+- **External Data**: RapidAPI (specifically the JSearch API) for real-time job aggregation
 
 ## Getting Started
 
@@ -46,6 +47,7 @@ SkillGap is an intelligent, AI-powered career assistant designed to help profess
    NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
    OPENAI_API_KEY=your_openai_api_key
+   RAPIDAPI_KEY=your_rapidapi_key
    ```
    *(Note: Without an OpenAI API key, the app will gracefully fall back to mock AI responses for demonstration purposes).*
 

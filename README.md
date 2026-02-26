@@ -32,7 +32,7 @@ SkillGap is an intelligent, AI-powered career assistant designed to help profess
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/yourusername/skillgap.git
+   git clone https://github.com/Anish0104/skillgap.git
    cd skillgap
    ```
 

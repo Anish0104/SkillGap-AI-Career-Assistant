@@ -3,7 +3,7 @@ import PDFParser from 'pdf2json'
 
 export async function extractTextFromPdf(buffer: Buffer): Promise<string> {
     return new Promise((resolve, reject) => {
-        const pdfParser = new PDFParser(this, 1)
+        const pdfParser = new PDFParser(null, true)
 
         pdfParser.on("pdfParser_dataError", (errData: any) => {
             console.error("[PDF Parser] ❌ Error:", errData.parserError)

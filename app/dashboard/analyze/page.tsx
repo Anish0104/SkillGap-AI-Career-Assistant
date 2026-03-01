@@ -13,9 +13,10 @@ import {
     SelectTrigger,
     SelectValue
 } from "@/components/ui/select"
-import { Sparkles, Loader2, BarChart4, ChevronRight, AlertCircle } from 'lucide-react'
+import { Sparkles, Loader2, BarChart4, ChevronRight, AlertCircle, GraduationCap } from 'lucide-react'
 import { Badge } from "@/components/ui/badge"
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { toast } from 'sonner'
 
@@ -35,6 +36,8 @@ export default function AnalyzePage() {
     const [isAnalyzing, setIsAnalyzing] = useState(false)
     const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null)
     const [isLoadingResumes, setIsLoadingResumes] = useState(true)
+    const [isGeneratingPath, setIsGeneratingPath] = useState(false)
+    const router = useRouter()
 
     const supabase = createClient()
 
@@ -97,6 +100,40 @@ export default function AnalyzePage() {
             toast.error(errorMessage, { id: toastId })
         } finally {
             setIsAnalyzing(false)
+        }
+    }
+
+    const handleGenerateLearningPath = async () => {
+        if (!analysisResult?.missingSkills?.length) {
+            toast.error("No missing skills to generate a path for.")
+            return
+        }
+
+        setIsGeneratingPath(true)
+        const toastId = toast.loading('Generating your custom learning path...')
+
+        try {
+            const response = await fetch('/api/learning-path/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    skills: analysisResult.missingSkills
+                })
+            })
+
+            if (!response.ok) {
+                const error = await response.json()
+                throw new Error(error.error || "Failed to generate learning path")
+            }
+
+            toast.success('Learning path generated successfully!', { id: toastId })
+            router.push('/dashboard/learning-paths')
+        } catch (error: unknown) {
+            console.error(error)
+            const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred"
+            toast.error(errorMessage, { id: toastId })
+        } finally {
+            setIsGeneratingPath(false)
         }
     }
 
@@ -227,7 +264,7 @@ export default function AnalyzePage() {
                                         <CardTitle className="text-lg">Identified Gaps</CardTitle>
                                     </CardHeader>
                                     <CardContent className="p-6">
-                                        <ul className="space-y-3">
+                                        <ul className="space-y-3 mb-6">
                                             {analysisResult.missingSkills?.map((skill: string, i: number) => (
                                                 <li key={i} className="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-400">
                                                     <div className="mt-1.5 h-1.5 w-1.5 rounded-full bg-amber-500 flex-shrink-0" />
@@ -235,6 +272,19 @@ export default function AnalyzePage() {
                                                 </li>
                                             ))}
                                         </ul>
+                                        {analysisResult.missingSkills && analysisResult.missingSkills.length > 0 && (
+                                            <Button
+                                                className="w-full bg-indigo-600 hover:bg-indigo-700 shadow-md shadow-indigo-600/20 mt-4"
+                                                onClick={handleGenerateLearningPath}
+                                                disabled={isGeneratingPath}
+                                            >
+                                                {isGeneratingPath ? (
+                                                    <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Generating...</>
+                                                ) : (
+                                                    <><GraduationCap className="mr-2 h-4 w-4" /> 🚀 Generate Learning Path</>
+                                                )}
+                                            </Button>
+                                        )}
                                     </CardContent>
                                 </Card>
 

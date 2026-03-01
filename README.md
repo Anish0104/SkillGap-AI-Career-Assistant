@@ -6,8 +6,9 @@ SkillGap is an intelligent, AI-powered career assistant designed to help profess
 
 - **Resume Parsing**: Upload your resume (PDF) and let AI extract key skills, experiences, and structured data automatically.
 - **AI Job Matching**: Compare your resume against a specific job description to get a Match Score, uncover missing skills, and receive actionable recommendations.
+- **Custom Learning Paths**: Automatically generate a comprehensive syllabus and step-by-step roadmap tailored specifically to bridge your identified skill gaps for a target job.
+- **AI Mock Interview Simulator**: Practice your interview skills with an interactive, Gemini-powered chat simulator that plays the role of a technical recruiter, asks targeted questions based on your resume, and provides a final grade and constructive feedback.
 - **Application Tracker**: Keep track of the jobs you've applied to, update their statuses (Applied, Interviewing, Offer, Rejected), and monitor your overall progress.
-- **Job Board**: A featured job board powered by the **JSearch API (via RapidAPI)** where you can explore real, live opportunities and save them.
 - **Modern UI**: A fully responsive, accessible, and theme-able interface built with Tailwind CSS, explicitly supporting both premium Light and Dark modes seamlessly across actions.
 
 ## Tech Stack
@@ -17,8 +18,7 @@ SkillGap is an intelligent, AI-powered career assistant designed to help profess
 - **Styling**: Tailwind CSS
 - **UI Components**: shadcn/ui, Radix UI, Lucide Icons
 - **Database / Auth / Storage**: Supabase (PostgreSQL, Row Level Security)
-- **AI & Processing**: OpenAI API (`gpt-4o-mini`), pdf.js (for client-side/server-side parsing)
-- **External Data**: RapidAPI (specifically the JSearch API) for real-time job aggregation
+- **AI Engine**: Google Gemini API (`gemini-2.5-flash`), pdf.js (for client-side/server-side parsing)
 
 ## Getting Started
 
@@ -26,7 +26,7 @@ SkillGap is an intelligent, AI-powered career assistant designed to help profess
 
 - Node.js 18.x or later
 - A [Supabase](https://supabase.com/) account
-- An [OpenAI](https://openai.com/) API Key for AI resume analysis
+- A [Google AI Studio](https://aistudio.google.com/) API Key for Gemini API
 
 ### Installation
 
@@ -46,13 +46,11 @@ SkillGap is an intelligent, AI-powered career assistant designed to help profess
    ```env
    NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-   OPENAI_API_KEY=your_openai_api_key
-   RAPIDAPI_KEY=your_rapidapi_key
+   GEMINI_API_KEY=your_gemini_api_key
    ```
-   *(Note: Without an OpenAI API key, the app will gracefully fall back to mock AI responses for demonstration purposes).*
 
 4. **Database Setup**:
-   Copy the contents of `supabase/schema.sql` and execute them in your Supabase project's SQL Editor. This will set up the necessary tables (`profiles`, `resumes`, `jobs`, `applications`, `job_analyses`), Triggers, Storage Buckets, and Row Level Security (RLS) policies.
+   Execute the migration queries located in `supabase/migrations/` in your Supabase project's SQL Editor sequentially (e.g. `001_add_ai_features.sql`). This will set up the necessary tables (`profiles`, `resumes`, `jobs`, `applications`, `learning_paths`, `mock_interviews`), along with Row Level Security (RLS) policies.
 
 5. **Run the Development Server**:
    ```bash

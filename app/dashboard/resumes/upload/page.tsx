@@ -68,7 +68,11 @@ export default function UploadResumePage() {
                 throw new Error(result.error || 'Failed to parse resume')
             }
 
-            toast.success('Resume uploaded and analyzed successfully!', { id: toastId })
+            if (result.warning) {
+                toast.warning(`Resume uploaded, but AI analysis failed: ${result.warning}`, { id: toastId, duration: 6000 })
+            } else {
+                toast.success('Resume uploaded and analyzed successfully!', { id: toastId })
+            }
             router.push('/dashboard/resumes')
             router.refresh()
         } catch (error: unknown) {

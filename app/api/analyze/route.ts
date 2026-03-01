@@ -1,7 +1,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import OpenAI from 'openai'
+import { GoogleGenAI } from '@google/genai'
 
 interface AnalysisResult {
     matchScore: number
@@ -13,8 +13,8 @@ interface AnalysisResult {
 }
 
 export async function POST(request: NextRequest) {
-    const apiKey = process.env.OPENAI_API_KEY
-    const openai = apiKey ? new OpenAI({ apiKey }) : null
+    const apiKey = process.env.GEMINI_API_KEY
+    const ai = apiKey ? new GoogleGenAI({ apiKey }) : null
 
     try {
         const { resumeId, jobDescription, jobId } = await request.json()
@@ -67,13 +67,13 @@ export async function POST(request: NextRequest) {
             isMock: true
         })
 
-        if (openai) {
+        if (ai) {
             try {
-                const completion = await openai.chat.completions.create({
-                    messages: [
-                        {
-                            role: "system",
-                            content: `You are a world-class Technical Recruiter and ATS Optimization Expert with 20+ years of experience at top-tier firms like Google and Meta.
+                const response = await ai.models.generateContent({
+                    model: "gemini-2.5-flash",
+                    contents: `RESUME TEXT:\n${resume.extracted_text}\n\nJOB DESCRIPTION:\n${jobDescription}`,
+                    config: {
+                        systemInstruction: `You are a world-class Technical Recruiter and ATS Optimization Expert with 20+ years of experience at top-tier firms like Google and Meta.
                             Your goal is to perform a BRUTALLY HONEST and HIGHLY DETAILED gap analysis between a candidate's resume and a job description.
                             
                             INSTRUCTIONS:
@@ -91,18 +91,12 @@ export async function POST(request: NextRequest) {
                             - recommendations (string array)
                             - detailedAnalysis (string - a deep dive into alignment, culture fit, and potential red flags)
                             
-                            TONE: Professional, analytical, and authoritative.`
-                        },
-                        {
-                            role: "user",
-                            content: `RESUME TEXT:\n${resume.extracted_text}\n\nJOB DESCRIPTION:\n${jobDescription}`
-                        }
-                    ],
-                    model: "gpt-4o-mini",
-                    response_format: { type: "json_object" },
+                            TONE: Professional, analytical, and authoritative.`,
+                        responseMimeType: "application/json",
+                    }
                 })
 
-                const content = completion.choices[0].message.content
+                const content = response.text
                 if (content) {
                     analysis = JSON.parse(content)
                     analysis.isMock = false
@@ -110,12 +104,12 @@ export async function POST(request: NextRequest) {
                     analysis = getMockAnalysis()
                 }
             } catch (apiError: unknown) {
-                console.error("OpenAI API Error (Analyze):", apiError)
+                console.error("Gemini API Error (Analyze):", apiError)
                 analysis = getMockAnalysis()
             }
         } else {
             // MOCK ANALYSIS FALLBACK
-            console.warn("Using Mock Analysis because OPENAI_API_KEY is missing")
+            console.warn("Using Mock Analysis because GEMINI_API_KEY is missing")
             analysis = getMockAnalysis()
         }
 

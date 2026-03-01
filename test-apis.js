@@ -35,46 +35,31 @@ async function testRapidAPI() {
     }
 }
 
-async function testOpenAI() {
-    console.log('\n--- Testing OpenAI API ---');
-    const apiKey = process.env.OPENAI_API_KEY;
+async function testGemini() {
+    console.log('\n--- Testing Gemini API ---');
+    const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
-        console.error('OPENAI_API_KEY missing in .env.local');
+        console.error('GEMINI_API_KEY missing in .env.local');
         return;
     }
 
-    const url = 'https://api.openai.com/v1/chat/completions';
+    const { GoogleGenAI } = require('@google/genai');
     try {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${apiKey}`
-            },
-            body: JSON.stringify({
-                model: "gpt-3.5-turbo",
-                messages: [{ role: "user", content: "Say hello!" }],
-                max_tokens: 10
-            })
+        const ai = new GoogleGenAI({ apiKey });
+        const response = await ai.models.generateContent({
+            model: "gemini-2.5-flash",
+            contents: "Say hello!"
         });
-
-        if (response.ok) {
-            const data = await response.json();
-            console.log('OpenAI Success! Response:', data.choices[0]?.message?.content);
-        } else {
-            console.error('OpenAI Error:', response.status, response.statusText);
-            const text = await response.text();
-            console.error(text);
-        }
+        console.log('Gemini Success! Response:', response.text);
     } catch (error) {
-        console.error('OpenAI Fetch Crash:', error.message);
+        console.error('Gemini Fetch Crash:', error.message);
     }
 }
 
 async function runTests() {
     try {
         await testRapidAPI();
-        await testOpenAI();
+        await testGemini();
     } catch (e) {
         console.error('Global error:', e);
     }

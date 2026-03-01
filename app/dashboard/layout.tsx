@@ -13,8 +13,18 @@ import {
     LogOut,
     Bell,
     Briefcase,
-    Zap
+    Zap,
+    GraduationCap,
+    Mic
 } from "lucide-react"
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 export default async function DashboardLayout({
     children,
@@ -58,6 +68,8 @@ export default async function DashboardLayout({
                         <NavItem href="/dashboard" icon={<LayoutDashboard className="h-4 w-4" />} label="Overview" />
                         <NavItem href="/dashboard/resumes" icon={<FileText className="h-4 w-4" />} label="Resumes" />
                         <NavItem href="/dashboard/analyze" icon={<Search className="h-4 w-4" />} label="Job Analysis" />
+                        <NavItem href="/dashboard/learning-paths" icon={<GraduationCap className="h-4 w-4" />} label="Learning Paths" />
+                        <NavItem href="/dashboard/interviews" icon={<Mic className="h-4 w-4" />} label="Mock Interviews" />
                         <NavItem href="/dashboard/applications" icon={<BarChart className="h-4 w-4" />} label="Tracker" />
                         <NavItem href="/dashboard/jobs" icon={<Briefcase className="h-4 w-4" />} label="Job Board" />
                     </nav>
@@ -92,10 +104,35 @@ export default async function DashboardLayout({
                     <div className="flex items-center gap-4">
                         <ModeToggle />
                         <div className="h-4 w-px bg-slate-200 dark:bg-white/10 mx-1" />
-                        <Button variant="ghost" size="icon" className="rounded-full relative hover:bg-slate-100 dark:hover:bg-white/5 h-9 w-9 border border-slate-200 dark:border-white/10">
-                            <Bell className="h-4 w-4 text-slate-500 dark:text-slate-400" />
-                            <span className="absolute top-2 right-2 w-1.5 h-1.5 bg-blue-600 rounded-full border border-white dark:border-slate-900" />
-                        </Button>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="icon" className="rounded-full relative hover:bg-slate-100 dark:hover:bg-white/5 h-9 w-9 border border-slate-200 dark:border-white/10">
+                                    <Bell className="h-4 w-4 text-slate-500 dark:text-slate-400" />
+                                    <span className="absolute top-2 right-2 w-1.5 h-1.5 bg-blue-600 rounded-full border border-white dark:border-slate-900" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="w-80 border-slate-200 dark:border-slate-800">
+                                <DropdownMenuLabel className="font-bold text-slate-900 dark:text-white">Notifications</DropdownMenuLabel>
+                                <DropdownMenuSeparator className="bg-slate-100 dark:bg-slate-800" />
+                                <DropdownMenuItem className="flex flex-col items-start gap-1 p-3 cursor-pointer focus:bg-slate-50 dark:focus:bg-slate-900">
+                                    <div className="flex items-center gap-2 w-full justify-between">
+                                        <span className="font-semibold text-sm text-slate-900 dark:text-white">New Feature: AI Interviews 🤖</span>
+                                        <span className="text-[10px] text-blue-600 font-bold bg-blue-100 dark:bg-blue-900/40 dark:text-blue-400 px-2 py-0.5 rounded-full">NEW</span>
+                                    </div>
+                                    <span className="text-xs text-slate-500 dark:text-slate-400">Practice your technical skills with our new mock interview simulator powered by Gemini.</span>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem className="flex flex-col items-start gap-1 p-3 cursor-pointer focus:bg-slate-50 dark:focus:bg-slate-900">
+                                    <div className="flex items-center gap-2 w-full justify-between">
+                                        <span className="font-semibold text-sm text-slate-900 dark:text-white">Welcome to SkillGap! 🎉</span>
+                                    </div>
+                                    <span className="text-xs text-slate-500 dark:text-slate-400">Upload a resume and analyze a job description to discover your skill gaps.</span>
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator className="bg-slate-100 dark:bg-slate-800" />
+                                <div className="p-3 text-center text-xs text-slate-400 font-medium">
+                                    You're all caught up!
+                                </div>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                         <div className="h-4 w-px bg-slate-200 dark:bg-white/10 mx-1" />
                         <div className="flex items-center gap-3">
                             <div className="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-[10px] font-bold shadow-sm ring-2 ring-slate-100 dark:ring-white/5">

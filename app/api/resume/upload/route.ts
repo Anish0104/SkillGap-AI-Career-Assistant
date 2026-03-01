@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { parseResume } from '@/lib/resume-parser'
-import OpenAI from 'openai'
+import { GoogleGenAI } from '@google/genai'
 
 interface ExperienceEntry {
     title: string
@@ -147,15 +147,15 @@ function parseResumeWithRegex(text: string, userEmail: string): StructuredResume
 }
 
 export async function POST(request: NextRequest) {
-    const apiKey = process.env.OPENAI_API_KEY
-    const openai = apiKey ? new OpenAI({ apiKey }) : null
+    const apiKey = process.env.GEMINI_API_KEY
+    const ai = apiKey ? new GoogleGenAI({ apiKey }) : null
 
     try {
         const formData = await request.formData()
         const file = formData.get('file') as File
         const filePath = formData.get('filePath') as string
 
-        console.log(`[Resume Upload] Processing: ${file?.name}, size: ${file?.size}b, OpenAI key: ${!!apiKey}`)
+        console.log(`[Resume Upload] Processing: ${file?.name}, size: ${file?.size}b, Gemini key: ${!!apiKey}`)
 
         if (!file || !filePath) {
             return NextResponse.json({ error: 'File and filePath are required' }, { status: 400 })
@@ -190,57 +190,82 @@ export async function POST(request: NextRequest) {
             education: []
         }
 
-        if (openai) {
+        if (ai) {
             try {
-                console.log('[Resume Upload] 🤖 Calling OpenAI...')
-                const completion = await openai.chat.completions.create({
-                    model: "gpt-4o-mini",
-                    messages: [
-                        {
-                            role: "system",
-                            content: `You are an expert ATS resume parser. Extract ONLY what is explicitly stated in the resume text. Do NOT invent or infer data. Return valid JSON only.`
-                        },
-                        {
-                            role: "user",
-                            content: `Parse this resume and return JSON with these exact fields:
+                console.log('[Resume Upload] 🤖 Calling Gemini...')
+                const response = await ai.models.generateContent({
+                    model: "gemini-2.5-flash",
+                    contents: `Parse the following RESUME text and return a JSON object with this exact structure:
 {
   "name": "Full name exactly as written",
   "email": "Email address",
   "phone": "Phone number",
-  "skills": ["Every skill, tool, language, framework mentioned"],
-  "experience": [{ "company": "", "title": "", "start_date": "", "end_date": "", "description": "" }],
-  "education": [{ "school": "", "degree": "", "field": "", "graduation_year": "" }]
+  "skills": ["Every skill, tool, language, or framework mentioned"],
+  "experience": [
+    { 
+      "company": "Company Name", 
+      "title": "Job Title", 
+      "start_date": "Start Date (e.g., Jan 2020 or 2020)", 
+      "end_date": "End Date (e.g., Present, Dec 2023)", 
+      "description": "Full description of responsibilities and achievements" 
+    }
+  ],
+  "education": [
+    { 
+      "school": "University or School Name", 
+      "degree": "Degree Level (e.g., Bachelor of Science)", 
+      "field": "Major or Field of Study", 
+      "graduation_year": "Year of Graduation" 
+    }
+  ]
 }
 
-RESUME:
-${extractedText}`
-                        }
-                    ],
-                    temperature: 0,
-                    response_format: { type: "json_object" }
+RESUME TEXT:
+${extractedText}`,
+                    config: {
+                        systemInstruction: `You are an expert ATS (Applicant Tracking System) resume parser. Your job is to extract highly structured data from a raw resume text.
+Rules:
+1. Extract ALL work experience (jobs, internships, freelance) into the "experience" array. Do not miss any past roles.
+2. Extract ALL educational history (degrees, universities, certifications) into the "education" array.
+3. Keep descriptions detailed but formatted as a single string.
+4. If a field is not found, use null or an empty string/array.
+5. Return valid JSON only, exactly matching the requested format.`,
+                        temperature: 0,
+                        responseMimeType: "application/json"
+                    }
                 })
 
-                const content = completion.choices[0].message.content
+                const content = response.text
                 if (content) {
-                    structuredData = JSON.parse(content)
-                    structuredData.isMock = false
-                    console.log('[Resume Upload] ✅ AI parsed:', JSON.stringify(structuredData, null, 2))
+                    // Strip markdown wrapping (```json ... ```) that Gemini sometimes adds
+                    const cleanJson = content.replace(/```json\n?/g, '').replace(/```/g, '').trim()
+                    try {
+                        structuredData = JSON.parse(cleanJson)
+                        structuredData.isMock = false
+                        console.log('[Resume Upload] ✅ AI parsed successfully.')
+                    } catch (parseError) {
+                        console.error('[Resume Upload] ❌ Failed to parse Gemini JSON output:', cleanJson)
+                        throw new Error("Invalid JSON from Gemini")
+                    }
                 } else {
                     structuredData = parseResumeWithRegex(extractedText, user.email || '')
                 }
 
             } catch (aiError: unknown) {
                 const errorMessage = aiError instanceof Error ? aiError.message : String(aiError)
-                const isQuotaError = errorMessage.includes('quota') || errorMessage.includes('429')
-                console.error(`[Resume Upload] ❌ OpenAI Error (${isQuotaError ? 'QUOTA EXCEEDED' : 'API ERROR'}):`, errorMessage)
+                const isQuotaError = errorMessage.includes('429') || errorMessage.includes('Resource has been exhausted')
+                console.error(`[Resume Upload] ❌ Gemini Error (${isQuotaError ? 'QUOTA EXCEEDED' : 'API ERROR'}):`, errorMessage)
 
                 // Use regex-based parser instead of mock data
                 console.log('[Resume Upload] 🔄 Using regex fallback parser...')
                 structuredData = parseResumeWithRegex(extractedText, user.email || '')
+                structuredData.isMock = true // Let frontend know this isn't fully AI
+                    // We add an explicit tag so the frontend can optionally warn the user
+                    ; (structuredData as any).aiError = isQuotaError ? "Gemini Quota Exceeded. Using basic fallback text extraction." : "AI Processing Failed. Using basic fallback text extraction."
                 console.log('[Resume Upload] ✅ Regex parsed:', JSON.stringify(structuredData, null, 2))
             }
         } else {
-            console.warn('[Resume Upload] ⚠️ No OpenAI Key — using regex fallback')
+            console.warn('[Resume Upload] ⚠️ No API Key — using regex fallback')
             structuredData = parseResumeWithRegex(extractedText, user.email || '')
         }
 
@@ -263,7 +288,11 @@ ${extractedText}`
         }
 
         console.log('[Resume Upload] ✅ Saved resume ID:', data.id)
-        return NextResponse.json({ success: true, data })
+        return NextResponse.json({
+            success: true,
+            data,
+            warning: (structuredData as any).aiError || null
+        })
 
     } catch (error: unknown) {
         console.error('[Resume Upload] ❌ Fatal Error:', error)

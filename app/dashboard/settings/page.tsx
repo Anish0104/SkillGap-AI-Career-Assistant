@@ -133,6 +133,30 @@ export default function SettingsPage() {
         }
     }
 
+    const [deletingAccount, setDeletingAccount] = useState(false)
+
+    const deleteAccount = async () => {
+        const confirmed = window.confirm("Are you absolutely sure? This action is permanent and will delete all your resumes, tracking data, and history instantly.")
+        if (!confirmed) return
+
+        setDeletingAccount(true)
+        try {
+            const res = await fetch('/api/user/delete', { method: 'DELETE' })
+            if (!res.ok) {
+                const data = await res.json()
+                throw new Error(data.error || "Failed to delete account")
+            }
+
+            // Successfully deleted from backend, clear local session
+            await supabase.auth.signOut()
+            window.location.href = '/'
+
+        } catch (error: any) {
+            toast.error(error.message)
+            setDeletingAccount(false)
+        }
+    }
+
     if (loading) {
         return (
             <div className="flex items-center justify-center p-20">
@@ -325,8 +349,14 @@ export default function SettingsPage() {
                         <Card className="border-red-200 dark:border-red-900/40 shadow-sm rounded-3xl p-8">
                             <h3 className="text-xl font-black text-slate-900 dark:text-white mb-2">Danger Zone</h3>
                             <p className="text-slate-500 text-sm mb-6 max-w-lg">Deleting your account will permanently erase all resumes, tracked applications, and AI historical data. This action cannot be reversed.</p>
-                            <Button disabled variant="outline" className="rounded-xl h-12 px-8 font-bold border-red-200 text-red-600 dark:border-red-900 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 gap-2 opacity-60 cursor-not-allowed">
-                                <Trash2 className="h-4 w-4" /> Terminate Account
+                            <Button
+                                disabled={deletingAccount}
+                                variant="outline"
+                                className="rounded-xl h-12 px-8 font-bold border-red-200 text-red-600 dark:border-red-900 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 gap-2 opacity-100"
+                                onClick={deleteAccount}
+                            >
+                                {deletingAccount ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+                                {deletingAccount ? "Deleting..." : "Terminate Account"}
                             </Button>
                         </Card>
                     </div>

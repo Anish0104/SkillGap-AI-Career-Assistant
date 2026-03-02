@@ -33,6 +33,7 @@ export default function SettingsPage() {
         last_name: '',
         email: '',
         bio: '',
+        avatar_url: '',
         salary_expectation: '',
         location_preference: 'Remote'
     })
@@ -57,6 +58,7 @@ export default function SettingsPage() {
                     last_name: names.slice(1).join(' ') || '',
                     email: data.email || user.email || '',
                     bio: data.bio || '',
+                    avatar_url: data.avatar_url || '',
                     salary_expectation: data.salary_expectation || '',
                     location_preference: data.location_preference || 'Remote'
                 })
@@ -77,6 +79,7 @@ export default function SettingsPage() {
             .update({
                 full_name: `${profile.first_name} ${profile.last_name}`.trim(),
                 bio: profile.bio,
+                avatar_url: profile.avatar_url,
                 updated_at: new Date().toISOString()
             })
             .eq('id', user.id)
@@ -85,8 +88,49 @@ export default function SettingsPage() {
             toast.error("Failed to update profile: " + error.message)
         } else {
             toast.success("Profile updated successfully!")
+            // Force a reload to update the layout header avatar
+            setTimeout(() => window.location.reload(), 1000)
         }
         setSaving(false)
+    }
+
+    const [uploadingAvatar, setUploadingAvatar] = useState(false)
+
+    const uploadAvatar = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        try {
+            setUploadingAvatar(true)
+
+            if (!event.target.files || event.target.files.length === 0) {
+                return
+            }
+
+            const file = event.target.files[0]
+            const fileExt = file.name.split('.').pop()
+            const { data: { user } } = await supabase.auth.getUser()
+            if (!user) throw new Error("Not authenticated")
+
+            const filePath = `${user.id}-${Math.random()}.${fileExt}`
+
+            // Upload to Supabase Storage
+            const { error: uploadError } = await supabase.storage
+                .from('avatars')
+                .upload(filePath, file)
+
+            if (uploadError) {
+                throw uploadError
+            }
+
+            // Get public URL
+            const { data } = supabase.storage.from('avatars').getPublicUrl(filePath)
+
+            setProfile(prev => ({ ...prev, avatar_url: data.publicUrl }))
+            toast.success("Avatar uploaded! Remember to click 'Save Identity'.")
+
+        } catch (error: any) {
+            toast.error(error.message || "Error uploading avatar!")
+        } finally {
+            setUploadingAvatar(false)
+        }
     }
 
     if (loading) {
@@ -125,10 +169,36 @@ export default function SettingsPage() {
                         <div className="h-32 bg-gradient-to-r from-blue-600 to-indigo-700" />
                         <CardContent className="px-8 pb-8 -mt-12 relative">
                             <div className="flex flex-col md:flex-row gap-8 items-end mb-8">
-                                <div className="h-28 w-28 rounded-[2rem] bg-white dark:bg-slate-950 p-1 shadow-2xl">
-                                    <div className="h-full w-full rounded-[1.75rem] bg-slate-50 dark:bg-slate-900 flex items-center justify-center border border-slate-100 dark:border-slate-800">
-                                        <User className="h-12 w-12 text-slate-300" />
-                                    </div>
+                                <div className="h-28 w-28 rounded-[2rem] bg-white dark:bg-slate-950 p-1 shadow-2xl relative group cursor-pointer overflow-hidden">
+                                    <Label htmlFor="avatar-upload" className="cursor-pointer">
+                                        <div className="h-full w-full rounded-[1.75rem] bg-slate-50 dark:bg-slate-900 flex items-center justify-center border border-slate-100 dark:border-slate-800 overflow-hidden relative">
+                                            {profile.avatar_url ? (
+                                                <img src={profile.avatar_url} alt="Avatar" className="h-full w-full object-cover" />
+                                            ) : (
+                                                <User className="h-12 w-12 text-slate-300" />
+                                            )}
+
+                                            {/* Hover Overlay */}
+                                            <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white font-bold text-xs">
+                                                {uploadingAvatar ? (
+                                                    <Loader2 className="h-6 w-6 animate-spin text-white" />
+                                                ) : (
+                                                    <>
+                                                        <Zap className="h-5 w-5 mb-1 text-blue-400 fill-blue-400" />
+                                                        Update
+                                                    </>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </Label>
+                                    <input
+                                        type="file"
+                                        id="avatar-upload"
+                                        accept="image/*"
+                                        className="hidden"
+                                        onChange={uploadAvatar}
+                                        disabled={uploadingAvatar}
+                                    />
                                 </div>
                                 <div className="flex-1 pb-2">
                                     <h3 className="text-2xl font-black text-slate-900 dark:text-white">Public Identity</h3>

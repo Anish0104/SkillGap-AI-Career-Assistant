@@ -322,10 +322,10 @@ export default function SettingsPage() {
                             </div>
                         </Card>
 
-                        <Card className="border-red-100 dark:border-red-900/20 bg-red-50/10 dark:bg-red-900/5 rounded-3xl p-8">
-                            <h3 className="text-xl font-black text-red-900 dark:text-red-400 mb-2">Danger Zone</h3>
-                            <p className="text-red-800/60 dark:text-red-400/60 text-sm mb-6 max-w-lg">Deleting your account will permanently erase all resumes, tracked applications, and AI historical data. This action cannot be reversed.</p>
-                            <Button disabled variant="destructive" className="rounded-xl h-12 px-8 font-black shadow-lg shadow-red-500/20 gap-2 opacity-50 cursor-not-allowed">
+                        <Card className="border-red-200 dark:border-red-900/40 shadow-sm rounded-3xl p-8">
+                            <h3 className="text-xl font-black text-slate-900 dark:text-white mb-2">Danger Zone</h3>
+                            <p className="text-slate-500 text-sm mb-6 max-w-lg">Deleting your account will permanently erase all resumes, tracked applications, and AI historical data. This action cannot be reversed.</p>
+                            <Button disabled variant="outline" className="rounded-xl h-12 px-8 font-bold border-red-200 text-red-600 dark:border-red-900 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 gap-2 opacity-60 cursor-not-allowed">
                                 <Trash2 className="h-4 w-4" /> Terminate Account
                             </Button>
                         </Card>

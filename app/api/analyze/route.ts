@@ -98,6 +98,12 @@ export async function POST(request: NextRequest) {
             }
         } catch (apiError: any) {
             console.error("Gemini API Error (Analyze):", apiError)
+
+            const isQuotaError = apiError.status === 429 || apiError.message?.includes('429') || apiError.message?.includes('exhausted');
+            if (isQuotaError) {
+                return NextResponse.json({ error: "Gemini API Quota Exceeded. Please try again later or check your API key billing status." }, { status: 429 })
+            }
+
             return NextResponse.json({ error: apiError.message || "Failed to generate analysis" }, { status: 500 })
         }
 

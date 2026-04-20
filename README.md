@@ -4,7 +4,7 @@ SkillGap is an intelligent, AI-powered career assistant designed to help profess
 
 ## Features
 
-- **Resume Parsing**: Upload your resume (PDF) and let AI extract key skills, experiences, and structured data automatically.
+- **Resume Parsing**: Upload your resume (PDF) and let AI extract key skills, experiences, and structured data automatically
 - **AI Job Matching**: Compare your resume against a specific job description to get a Match Score, uncover missing skills, and receive actionable recommendations.
 - **Custom Learning Paths**: Automatically generate a comprehensive syllabus and step-by-step roadmap tailored specifically to bridge your identified skill gaps for a target job.
 - **AI Mock Interview Simulator**: Practice your interview skills with an interactive, Gemini-powered chat simulator that plays the role of a technical recruiter, asks targeted questions based on your resume, and provides a final grade and constructive feedback.

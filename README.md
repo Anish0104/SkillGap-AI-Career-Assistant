@@ -10,7 +10,6 @@ SkillGap is an intelligent, AI-powered career assistant designed to help profess
 - **AI Mock Interview Simulator**: Practice your interview skills with an interactive, Gemini-powered chat simulator that plays the role of a technical recruiter, asks targeted questions based on your resume, and provides a final grade and constructive feedback.
 - **Application Tracker**: Keep track of the jobs you've applied to, update their statuses (Applied, Interviewing, Offer, Rejected), and monitor your overall progress.
 - **Modern UI**: A fully responsive, accessible, and theme-able interface built with Tailwind CSS, explicitly supporting both premium Light and Dark modes seamlessly across actions.
-
 ## Tech Stack
 
 - **Framework**: Next.js 15 (App Router)
